@@ -17,5 +17,5 @@ return [
     'success_deleted_message' => 'The :name role has been deleted.',
 
     'menu_role_permission_label' => 'Role &amp; Permission',
-    'set_role_permissions_label' => 'Set Role Permissions',
+    'set_role_permissions_label' => 'Set Permissions',
 ];
