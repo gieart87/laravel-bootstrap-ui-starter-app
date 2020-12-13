@@ -64,6 +64,8 @@
   <script src="{{ asset('admin/stisla/assets/js/custom.js') }}"></script>
 
   <!-- Page Specific JS File -->
-  <script src="{{ asset('admin/stisla/assets/js/page/index.js') }}"></script>
+  @if ($currentAdminMenu && $currentAdminMenu == 'dashboard')
+    <script src="{{ asset('admin/stisla/assets/js/page/index.js') }}"></script>
+  @endif
 </body>
 </html>
