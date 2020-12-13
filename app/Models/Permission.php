@@ -25,6 +25,8 @@ class Permission extends SpatiePermission
     public static function defaultPermissions()
 	{
 		return [
+			'view_dashboard',
+
 			'view_users',
 			'add_users',
 			'edit_users',
@@ -34,11 +36,6 @@ class Permission extends SpatiePermission
 			'add_roles',
 			'edit_roles',
 			'delete_roles',
-
-			'view_pages',
-			'add_pages',
-			'edit_pages',
-			'delete_pages',
 		];
 	}
 }
