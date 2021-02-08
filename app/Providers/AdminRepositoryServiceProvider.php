@@ -10,6 +10,9 @@ use App\Repositories\Admin\RoleRepository;
 use App\Repositories\Admin\Interfaces\PermissionRepositoryInterface;
 use App\Repositories\Admin\PermissionRepository;
 
+use App\Repositories\Admin\Interfaces\UserRepositoryInterface;
+use App\Repositories\Admin\UserRepository;
+
 class AdminRepositoryServiceProvider extends ServiceProvider
 {
     /**
@@ -27,6 +30,11 @@ class AdminRepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             PermissionRepositoryInterface::class,
             PermissionRepository::class
+        );
+
+        $this->app->bind(
+            UserRepositoryInterface::class,
+            UserRepository::class
         );
     }
 

@@ -15,10 +15,11 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                        <a href="{{ url('admin/roles/create') }}" class="btn btn-icon icon-left btn-success"><i class="fas fa-plus-circle"></i> @lang('general.btn_create_label')</a>
+                        <h4>@lang('roles.role_management')</h4>
                     </div>
                     <div class="card-body">
                         @include('admin.shared.flash')
+                        @include('admin.roles._filter')
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped table-md">
                                 <thead>

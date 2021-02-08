@@ -35,7 +35,6 @@ class PermissionRepository implements PermissionRepositoryInterface
 
     public function create($params = [])
     {
-        $params['guard_name'] = 'web';
         return Permission::create($params);
     }
 
@@ -47,9 +46,9 @@ class PermissionRepository implements PermissionRepositoryInterface
     }
 
     public function delete($id)
-	{
-		$permission  = Permission::findOrFail($id);
+    {
+        $permission  = Permission::findOrFail($id);
 
-		return $permission->delete();
-	}
+        return $permission->delete();
+    }
 }

@@ -27,10 +27,12 @@ class RoleRequest extends FormRequest
      */
     public function rules()
     {
-        $role = Role::findOrFail($this->id);
+        if ($this->id) {
+            $role = Role::findOrFail($this->id);
 
-        if ($role->name == Role::ADMIN) {
-            return [];
+            if ($role->name == Role::ADMIN) {
+                return [];
+            }
         }
 
         return [

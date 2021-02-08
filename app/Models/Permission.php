@@ -18,24 +18,24 @@ class Permission extends SpatiePermission
         'guard_name',
     ];
 
-	protected $primaryKey = 'id';
+    protected $primaryKey = 'id';
     protected $keyType = 'string';
-	public $incrementing = false;
+    public $incrementing = false;
 
     public static function defaultPermissions()
-	{
-		return [
-			'view_dashboard',
+    {
+        return [
+            'view_dashboard',
 
-			'view_users',
-			'add_users',
-			'edit_users',
-			'delete_users',
+            'view_users',
+            'add_users',
+            'edit_users',
+            'delete_users',
 
-			'view_roles',
-			'add_roles',
-			'edit_roles',
-			'delete_roles',
-		];
-	}
+            'view_roles',
+            'add_roles',
+            'edit_roles',
+            'delete_roles',
+        ];
+    }
 }

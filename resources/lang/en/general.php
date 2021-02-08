@@ -7,8 +7,11 @@ return [
     'btn_delete_label' => 'Delete',
     'btn_update_label' => 'Update',
     'action_label' => 'Action',
+    'btn_search_label' => 'Search',
 
     'validation_error_message' => 'There are some problems with your input.',
 
     'menu_account_label' => 'Account',
+
+    'invalid_date_range' => 'Invalid date range',
 ];

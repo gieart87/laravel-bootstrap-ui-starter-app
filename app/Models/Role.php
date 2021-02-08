@@ -25,6 +25,11 @@ class Role extends SpatieRole
 
     const ADMIN = 'Admin';
 
+    public function getCreatedAtFormattedAttribute()
+    {
+        return Carbon::parse($this->attributes['created_at'])->format('d, M Y H:i:s');
+    }
+
     public function getUpdatedAtFormattedAttribute()
     {
         return Carbon::parse($this->attributes['updated_at'])->format('d, M Y H:i:s');

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use Carbon\Carbon;
+
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Concerns\UuidTrait;
 
@@ -46,4 +48,19 @@ class User extends Authenticatable
 
     protected $keyType = 'string';
     public $incrementing = false;
+
+    public function getCreatedAtFormattedAttribute()
+    {
+        return Carbon::parse($this->attributes['created_at'])->format('d, M Y H:i:s');
+    }
+
+    public function getUpdatedAtFormattedAttribute()
+    {
+        return Carbon::parse($this->attributes['updated_at'])->format('d, M Y H:i:s');
+    }
+
+    public function getVerifiedAtFormattedAttribute()
+    {
+        return Carbon::parse($this->attributes['email_verified_at'])->format('d, M Y H:i:s');
+    }
 }
