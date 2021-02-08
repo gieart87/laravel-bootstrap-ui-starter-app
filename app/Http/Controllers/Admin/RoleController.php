@@ -16,12 +16,14 @@ class RoleController extends Controller
     private $roleRepository;
     private $permissionRepository;
 
-    public function __construct(RoleRepositoryInterface $roleRepository, PermissionRepositoryInterface $permissionRepository)
+    public function __construct(RoleRepositoryInterface $roleRepository, PermissionRepositoryInterface $permissionRepository) // phpcs:ignore
     {
         parent::__construct();
 
         $this->roleRepository = $roleRepository;
         $this->permissionRepository = $permissionRepository;
+
+        $this->data['currentAdminMenu'] = 'roles';
     }
     /**
      * Display a listing of the resource.
@@ -81,7 +83,6 @@ class RoleController extends Controller
     public function show($id)
     {
         $this->data['role'] = $this->roleRepository->findById($id);
-
         return view('admin.roles.show', $this->data);
     }
 
@@ -114,11 +115,11 @@ class RoleController extends Controller
         $role = $this->roleRepository->findById($id);
 
         if ($this->roleRepository->update($id, $request->validated())) {
-			return redirect('admin/roles')
+            return redirect('admin/roles')
                 ->with('success', __('roles.success_updated_message', ['name' => $role->name]));
-		}
+        }
 
-		return redirect('admin/roles')
+        return redirect('admin/roles')
                 ->with('error', __('roles.fail_to_update_message', ['name' => $role->name]));
     }
 
@@ -133,11 +134,11 @@ class RoleController extends Controller
         $role = $this->roleRepository->findById($id);
 
         if ($this->roleRepository->delete($id)) {
-			return redirect('admin/roles')
+            return redirect('admin/roles')
                 ->with('success', __('roles.success_deleted_message', ['name' => $role->name]));
-		}
+        }
 
-		return redirect('admin/roles')
+        return redirect('admin/roles')
                 ->with('error', __('roles.fail_to_delete_message', ['name' => $role->name]));
     }
 }

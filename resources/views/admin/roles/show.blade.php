@@ -19,8 +19,37 @@
                     </div>
                     <div class="card-body">
                         @include('admin.shared.flash')
-                        <div class="form-group">
-                            <Label>Name: {{ $role->name }}</Label>
+                        <div class="form-row">
+                            <div class="col-md-2">
+                                <Label>Name</Label>
+                            </div>
+                            <div class="col-md-10">
+                                : {{ $role->name }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-2">
+                                <Label>Guard</Label>
+                            </div>
+                            <div class="col-md-10">
+                                : {{ $role->guard_name }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-2">
+                                <Label>Created</Label>
+                            </div>
+                            <div class="col-md-10">
+                                : {{ $role->created_at_formatted }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-2">
+                                <Label>Updated</Label>
+                            </div>
+                            <div class="col-md-10">
+                                : {{ $role->updated_at_formatted }}
+                            </div>
                         </div>
                     </div>
                 </div>

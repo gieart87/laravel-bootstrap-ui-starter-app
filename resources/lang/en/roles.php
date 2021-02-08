@@ -16,6 +16,6 @@ return [
     'fail_to_delete_message' => 'Could not delete the :name role.',
     'success_deleted_message' => 'The :name role has been deleted.',
 
-    'menu_role_permission_label' => 'Role &amp; Permission',
+    'menu_role_label' => 'Roles',
     'set_role_permissions_label' => 'Set Permissions',
 ];

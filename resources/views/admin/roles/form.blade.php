@@ -11,7 +11,7 @@
         </div>
     </div>
     @if (empty($role))
-        <form method="POST" action="{{ route('roles.store') }}">
+        <form method="POST" action="{{ url('admin/roles') }}">
     @else
         <form method="POST" action="{{ route('roles.update', $role->id) }}">
         <input type="hidden" name="id" value="{{ $role->id }}"/>
@@ -30,7 +30,7 @@
                             @include('admin.shared.flash')
                             <div class="form-group">
                                 <label>@lang('roles.name_label')</label>
-                                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror @if (!$errors->has('name') && old('name')) is-valid @endif" value="{{ old('name', !empty($role) ? $role->name : null) }}" {{ $disabled }}>
+                                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror @if (!$errors->has('name') && old('name')) is-valid @endif" value="{{ old('name', !empty($role) ? $role->name : null) }}" {{ $disabled ?? '' }}>
                                 @error('name')
                                     <div class="invalid-feedback">
                                     {{ $message }}
@@ -49,7 +49,7 @@
                             <h4>{{ __('roles.set_role_permissions_label') }}</h4>
                         </div>
                         <div class="card-body">
-                            @include('admin.roles._permissions')
+                            @include('admin.roles._permissions', ['disabled' => $disabled ?? ''])
                         </div>
                     </div>
                 </div>
