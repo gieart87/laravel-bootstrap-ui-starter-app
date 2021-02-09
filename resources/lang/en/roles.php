@@ -11,6 +11,7 @@ return [
     'add_card_title' => 'Add New Role',
     'update_card_title' => 'Update Role',
 
+    'success_create_message' => 'New role has been saved.',
     'success_updated_message' => 'The :name role has been updated.',
     'fail_to_update_message' => 'Could not update the :name role.',
     'fail_to_delete_message' => 'Could not delete the :name role.',

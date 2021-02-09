@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Admin;
 
+use DB;
+
 use App\Repositories\Admin\Interfaces\RoleRepositoryInterface;
 
 use App\Models\Role;
@@ -36,13 +38,15 @@ class RoleRepository implements RoleRepositoryInterface
     public function create($params = [])
     {
         $params['guard_name'] = 'web';
-    
-        if ($role = Role::create($params)) {
-            $permissions = !empty($params['permissions']) ? $params['permissions'] : [];
-            $role->syncPermissions($permissions);
 
-            return $role;
-        }
+        return DB::transaction(function () use ($params) {
+            if ($role = Role::create($params)) {
+                $permissions = !empty($params['permissions']) ? $params['permissions'] : [];
+                $role->syncPermissions($permissions);
+    
+                return $role;
+            }
+        });
     }
 
     public function update($id, $params = [])
@@ -53,20 +57,22 @@ class RoleRepository implements RoleRepositoryInterface
             return true;
         }
 
-        $permissions = !empty($params['permissions']) ? $params['permissions'] : [];
-        $role->syncPermissions($permissions);
-       
-        return $role->update($params);
+        return DB::transaction(function () use ($params, $role) {
+            $permissions = !empty($params['permissions']) ? $params['permissions'] : [];
+            $role->syncPermissions($permissions);
+        
+            return $role->update($params);
+        });
     }
 
     public function delete($id)
-	{
-		$role  = Role::findOrFail($id);
+    {
+        $role  = Role::findOrFail($id);
 
         if ($role->name == Role::ADMIN) {
             return false;
         }
 
-		return $role->delete();
-	}
+        return $role->delete();
+    }
 }
