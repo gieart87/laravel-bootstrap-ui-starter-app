@@ -87,11 +87,11 @@ class UserController extends Controller
 
         if ($this->userRepository->create($params)) {
             return redirect('admin/users')
-                ->with('success', 'User has been saved!');
+                ->with('success', __('users.success_create_message'));
         }
 
         return redirect('admin/users/create')
-            ->with('error', 'User could not be saved!');
+            ->with('error', __('users.fail_create_message'));
     }
 
     /**

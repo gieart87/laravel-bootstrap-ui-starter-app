@@ -20,6 +20,8 @@ return [
     'set_user_permissions_label' => 'Add Custom Permissions',
     'select_role_label' => 'Select Role',
 
+    'success_create_message' => 'The user has been saved.',
+    'fail_create_message' => 'The user could not be saved.',
     'success_updated_message' => 'The :name has been updated.',
     'fail_to_update_message' => 'Could not update the :name.',
     'fail_to_delete_message' => 'Could not delete the :name.',
