@@ -7,13 +7,13 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 use App\Models\User;
-use App\Models\Permission;
 use App\Models\Role;
+use App\Models\Permission;
 
-class RoleTest extends TestCase
+class UserTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
- 
+
     protected $admin;
     protected $user;
 
@@ -34,7 +34,6 @@ class RoleTest extends TestCase
 
         $this->user = User::factory()->create();
     }
-    
 
     /**
      * Setup the permissions
@@ -65,17 +64,17 @@ class RoleTest extends TestCase
      *
      * @return void
      */
-    private function setupRoles()
+    private function setupUsers()
     {
-        Role::factory()->create(
+        User::factory()->create(
             [
-                'name' => 'Role1',
+                'name' => 'User1',
             ]
         );
 
-        Role::factory()->create(
+        User::factory()->create(
             [
-                'name' => 'Role2',
+                'name' => 'User2',
             ]
         );
     }
@@ -85,49 +84,51 @@ class RoleTest extends TestCase
     // ==================
 
     /**
-     * Test admin can view the roles
+     * Test admin can view the users
      *
      * @return void
      */
-    public function testAdminCanViewTheRoleIndex()
+    public function testAdminCanViewTheUserIndex()
     {
-        $this->setupRoles();
+        $this->setupUsers();
 
         $response = $this
             ->actingAs($this->admin)
-            ->get('/admin/roles');
+            ->get('/admin/users');
         
         $response->assertStatus(200);
-        $response->assertSee('Role1');
-        $response->assertSee('Role2');
+        $response->assertSee('User1');
+        $response->assertSee('User1');
     }
+
 
     /**
      * Test admin can add a role
      *
      * @return void
      */
-    public function testAdminCanAddARole()
+    public function testAdminCanAddAUser()
     {
-        $permission = Permission::where('name', 'view_roles')->first();
-
         $params = [
             'name' => $this->faker->name(),
-            'permissions' => [$permission->name],
+            'email' => $this->faker->email(),
+            'permissions' => [],
+            'password' => 'password',
+            'password_confirmation' => 'password',
         ];
 
         $response = $this
             ->actingAs($this->admin)
-            ->post('/admin/roles', $params);
+            ->post('/admin/users', $params);
 
         $response->assertStatus(302);
         $response->assertSessionHasNoErrors();
-        $response->assertRedirect('/admin/roles');
-        $response->assertSessionHas('success', __('roles.success_create_message'));
+        $response->assertRedirect('/admin/users');
+        $response->assertSessionHas('success', __('users.success_create_message'));
 
-        $role = Role::where('name', $params['name'])->first();
-        $this->assertNotNull($role);
-        $this->assertEquals($params['name'], $role->name);
+        $user = User::where('name', $params['name'])->first();
+        $this->assertNotNull($user);
+        $this->assertEquals($params['name'], $user->name);
     }
 
     /**
@@ -135,27 +136,30 @@ class RoleTest extends TestCase
      *
      * @return void
      */
-    public function testAdminCanUpdateARole()
+    public function testAdminCanUpdateAUser()
     {
-        $existRole = Role::factory()->create();
-        $permission = Permission::where('name', 'view_roles')->first();
+        $existUser = User::factory()->create();
 
         $params = [
             'name' => $this->faker->name(),
-            'permissions' => [$permission->name],
+            'email' => $this->faker->email(),
+            'permissions' => [],
+            'password' => 'password',
+            'password_confirmation' => 'password',
         ];
+
         $response = $this
             ->actingAs($this->admin)
-            ->put('/admin/roles/'. $existRole->id, $params);
+            ->put('/admin/users/'. $existUser->id, $params);
 
-        $updatedRole = Role::find($existRole->id);
-        $this->assertEquals($params['name'], $updatedRole->name);
-        $this->assertEquals($existRole->id, $updatedRole->id);
+        $updateUser = User::find($existUser->id);
+        $this->assertEquals($params['name'], $updateUser->name);
+        $this->assertEquals($existUser->id, $updateUser->id);
 
         $response->assertStatus(302);
         $response->assertSessionHasNoErrors();
-        $response->assertRedirect('/admin/roles');
-        $response->assertSessionHas('success', __('roles.success_updated_message', ['name' => $existRole->name]));
+        $response->assertRedirect('/admin/users');
+        $response->assertSessionHas('success', __('users.success_updated_message', ['name' => $existUser->name]));
     }
 
     /**
@@ -165,18 +169,18 @@ class RoleTest extends TestCase
      */
     public function testAdminCanDeleteARole()
     {
-        $existRole = Role::factory()->create();
+        $existUser = User::factory()->create();
 
         $response = $this
             ->actingAs($this->admin)
-            ->delete('/admin/roles/'. $existRole->id);
+            ->delete('/admin/users/'. $existUser->id);
 
-        $role = Role::where('id', $existRole->id)->first();
-        $this->assertNull($role);
+        $user = User::where('id', $existUser->id)->first();
+        $this->assertNull($user);
 
         $response->assertStatus(302);
-        $response->assertRedirect('/admin/roles');
-        $response->assertSessionHas('success', __('roles.success_deleted_message', ['name' => $existRole->name]));
+        $response->assertRedirect('/admin/users');
+        $response->assertSessionHas('success', __('users.success_deleted_message', ['name' => $existUser->name]));
     }
     
     // ==================
@@ -188,42 +192,21 @@ class RoleTest extends TestCase
      *
      * @return void
      */
-    public function testAdminCanNotAddARoleWithBlankName()
+    public function testAdminCanNotAddAUserWithBlankName()
     {
         $params = [];
 
         $response = $this
             ->actingAs($this->admin)
-            ->post('/admin/roles', $params);
+            ->post('/admin/users', $params);
 
         $response->assertStatus(302);
         $response->assertSessionHasErrors();
 
         $errors = session('errors');
+
         $this->assertEquals('The name field is required.', $errors->get('name')[0]);
-    }
-    
-    /**
-     * Test admin can not add a role without any permission assigned (min: 1)
-     *
-     * @return void
-     */
-    public function testAdminCanNotAddARoleWithoutAnyPermissionAssigned()
-    {
-        $params = [
-            'name' => $this->faker->name(),
-            'permissions' => [],
-        ];
-
-        $response = $this
-            ->actingAs($this->admin)
-            ->post('/admin/roles', $params);
-
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors();
-
-        $errors = session('errors');
-        $this->assertEquals('The permissions field is required.', $errors->get('permissions')[0]);
+        $this->assertEquals('The email field is required.', $errors->get('email')[0]);
     }
     
     /**
@@ -231,22 +214,22 @@ class RoleTest extends TestCase
      *
      * @return void
      */
-    public function testAdminCanNotAddADuplicatedRole()
+    public function testAdminCanNotAddADuplicatedUserEmail()
     {
-        $existRole = Role::factory()->create();
+        $existUser = User::factory()->create();
 
         $params = [
-            'name' => $existRole->name,
+            'email' => $existUser->email,
         ];
 
         $response = $this
             ->actingAs($this->admin)
-            ->post('/admin/roles', $params);
+            ->post('/admin/users', $params);
 
         $response->assertStatus(302);
         $response->assertSessionHasErrors();
 
         $errors = session('errors');
-        $this->assertEquals('The name has already been taken.', $errors->get('name')[0]);
+        $this->assertEquals('The email has already been taken.', $errors->get('email')[0]);
     }
 }
