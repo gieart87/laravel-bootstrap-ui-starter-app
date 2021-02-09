@@ -64,10 +64,10 @@ class RoleController extends Controller
     public function store(RoleRequest $request)
     {
         $params = $request->validated();
-        
+
         if ($this->roleRepository->create($params)) {
             return redirect('admin/roles')
-                ->with('success', 'Role has been saved!');
+                ->with('success', __('roles.success_create_message'));
         }
 
         return redirect('admin/roles/create')
