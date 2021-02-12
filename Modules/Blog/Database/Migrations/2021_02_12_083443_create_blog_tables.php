@@ -15,16 +15,16 @@ class CreateBlogTables extends Migration
     {
         Schema::create('blog_posts', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->uuid('user_id')->index();
             $table->string('post_type');
-            $table->string('slug')->unique();
             $table->string('title');
-            $table->text('excerpt');
-            $table->text('body');
+            $table->string('slug')->unique();
             $table->integer('status')->default(0);
             $table->dateTime('publish_date')->index()->nullable();
+            $table->text('excerpt')->nullable();
+            $table->text('body');
             $table->string('featured_image')->nullable();
-            $table->string('featured_image_caption');
-            $table->uuid('user_id')->index();
+            $table->string('featured_image_caption')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
@@ -33,7 +33,7 @@ class CreateBlogTables extends Migration
 
         Schema::create('blog_categories', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('parent_id')->index();
+            $table->uuid('parent_id')->index()->nullable();
             $table->string('slug')->unique();
             $table->string('name');
             $table->timestamps();
