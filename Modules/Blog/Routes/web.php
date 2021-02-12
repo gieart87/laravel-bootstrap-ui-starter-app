@@ -14,3 +14,7 @@
 Route::prefix('blog')->group(function () {
     Route::get('/', 'BlogController@index');
 });
+
+Route::prefix('admin/blog')->namespace('\Modules\Blog\Http\Controllers\Admin')->middleware(['auth'])->group(function () { // phpcs:ignore
+    Route::resource('posts', 'PostController');
+});
