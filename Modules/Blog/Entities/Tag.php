@@ -31,4 +31,9 @@ class Tag extends Model
     {
         return \Modules\Blog\Database\factories\TagFactory::new();
     }
+
+    public function posts()
+    {
+        return $this->belongsToMany('Modules\Blog\Entities\Post', 'blog_posts_tags', 'tag_id', 'post_id');
+    }
 }

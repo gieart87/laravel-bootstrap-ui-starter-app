@@ -31,4 +31,9 @@ class Category extends Model
     {
         return \Modules\Blog\Database\factories\CategoryFactory::new();
     }
+
+    public function posts()
+    {
+        return $this->belongsToMany('Modules\Blog\Entities\Post', 'blog_categories_posts', 'category_id', 'post_id');
+    }
 }
