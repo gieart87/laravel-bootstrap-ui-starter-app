@@ -13,7 +13,7 @@
         @foreach ($moduleAdminMenus as $moduleAdminMenu)
             <li class="menu-header">{{ $moduleAdminMenu['module'] }}</li>
             @foreach ($moduleAdminMenu['admin_menus'] as $moduleMenu)
-                <li class="{{ ($currentAdminMenu == $moduleMenu['name']) ? $activeClass : '' }}"><a class="nav-link" href="{{ url($moduleMenu['route'])}}"><i class="{{ $moduleMenu['icon'] }}"></i> <span>{{ $moduleMenu['name'] }}</span></a></li>
+                <li class="{{ ($currentAdminMenu == strtolower($moduleMenu['name'])) ? $activeClass : '' }}"><a class="nav-link" href="{{ url($moduleMenu['route'])}}"><i class="{{ $moduleMenu['icon'] }}"></i> <span>{{ $moduleMenu['name'] }}</span></a></li>
             @endforeach
         @endforeach
         <li class="menu-header">@lang('general.menu_account_label')</li>

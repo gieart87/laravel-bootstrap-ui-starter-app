@@ -4,22 +4,47 @@ namespace Modules\Blog\Http\Controllers\Admin;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+// use Illuminate\Routing\Controller;
 
+use Modules\Blog\Http\Controllers\BlogController;
 use Nwidart\Modules\Module;
+use Modules\Blog\Http\Requests\PostRequest;
 
-class PostController extends Controller
+use Modules\Blog\Repositories\Admin\Interfaces\PostRepositoryInterface;
+use Modules\Blog\Repositories\Admin\Interfaces\CategoryRepositoryInterface;
+use Modules\Blog\Repositories\Admin\Interfaces\TagRepositoryInterface;
+
+class PostController extends BlogController
 {
-    public function __construct()
+    private $postRepository;
+    private $categoryRepository;
+    private $tagRepository;
+
+    public function __construct(PostRepositoryInterface $postRepository, CategoryRepositoryInterface $categoryRepository, TagRepositoryInterface $tagRepository) //phpcs:ignore
     {
+        parent::__construct();
         $this->data['currentAdminMenu'] = 'posts';
+
+        $this->postRepository = $postRepository;
+        $this->categoryRepository = $categoryRepository;
+        $this->tagRepository = $tagRepository;
+
+        $this->data['categories'] = $this->categoryRepository->findList();
     }
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index(Request $request)
+    public function index()
     {
+        $options = [
+            'per_page' => $this->perPage,
+            'order' => [
+                'created_at' => 'desc',
+            ]
+        ];
+
+        $this->data['posts'] = $this->postRepository->findAll($options);
         return view('blog::admin.posts.index', $this->data);
     }
 
@@ -29,7 +54,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('blog::create');
+        return view('blog::admin.posts.form', $this->data);
     }
 
     /**
@@ -37,7 +62,7 @@ class PostController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
         //
     }
@@ -59,7 +84,14 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        return view('blog::edit');
+        $post = $this->postRepository->findById($id);
+
+        $this->data['post'] = $post;
+        $this->data['tags'] = $this->tagRepository->findList();
+        $this->data['tagIds'] = $post->tags()->allRelatedIds();
+        $this->data['categories'] = $this->categoryRepository->findParentCategories();
+
+        return view('blog::admin.posts.form', $this->data);
     }
 
     /**
@@ -68,9 +100,9 @@ class PostController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, $id)
     {
-        //
+        dd($request->all());
     }
 
     /**

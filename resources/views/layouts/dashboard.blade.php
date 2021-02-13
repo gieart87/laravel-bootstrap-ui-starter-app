@@ -17,9 +17,11 @@
         <link rel="stylesheet" href="{{ asset('admin/stisla/plugins/owl.carousel/dist/assets/owl.theme.default.min.css') }}">
         <link rel="stylesheet" href="{{ asset('admin/stisla/plugins/bootstrap-daterangepicker/daterangepicker.css') }}">
         <link rel="stylesheet" href="{{ asset('admin/stisla/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('admin/stisla/plugins/select2/dist/css/select2.min.css') }}">
         <!-- Template CSS -->
         <link rel="stylesheet" href="{{ asset('admin/stisla/assets/css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('admin/stisla/assets/css/components.css') }}">
+        <link rel="stylesheet" href="{{ asset('admin/stisla/assets/css/custom.css') }}">
         <style>
             .btn-filter {
                 padding: .500rem .75rem;
@@ -66,10 +68,20 @@
         <script src="{{ asset('admin/stisla/plugins/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
         <script src="{{ asset('admin/stisla/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
         <script src="{{ asset('admin/stisla/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js') }}"></script>
+        <script src="{{ asset('admin/stisla/plugins/select2/dist/js/select2.min.js') }}"></script>
 
         <!-- Template JS File -->
         <script src="{{ asset('admin/stisla/assets/js/scripts.js') }}"></script>
         <script src="{{ asset('admin/stisla/assets/js/custom.js') }}"></script>
+        <script>
+            $(document).ready(function() {
+                $('.select2').select2();
+                $(".select2-tags").select2({
+                    tags: true
+                });
+
+            });
+        </script>
 
         <!-- Page Specific JS File -->
         @if ($currentAdminMenu && $currentAdminMenu == 'dashboard')

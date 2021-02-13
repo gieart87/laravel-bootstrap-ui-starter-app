@@ -4,6 +4,7 @@ namespace Modules\Blog\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 
 use App\Models\Concerns\UuidTrait;
 
@@ -69,5 +70,10 @@ class Post extends Model
     public function tags()
     {
         return $this->belongsToMany('Modules\Blog\Entities\Tag', 'blog_posts_tags', 'post_id', 'tag_id');
+    }
+
+    public function getUpdatedAtFormattedAttribute()
+    {
+        return Carbon::parse($this->attributes['updated_at'])->format('d, M Y H:i:s');
     }
 }

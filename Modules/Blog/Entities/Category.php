@@ -32,8 +32,18 @@ class Category extends Model
         return \Modules\Blog\Database\factories\CategoryFactory::new();
     }
 
+    public function children()
+    {
+        return $this->hasMany('Modules\Blog\Entities\Category', 'parent_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo('Modules\Blog\Entities\Category', 'parent_id');
+    }
+
     public function posts()
     {
-        return $this->belongsToMany('Modules\Blog\Entities\Post', 'blog_categories_posts', 'category_id', 'post_id');
+        return $this->belongsToMany('Modules\Blog\Entities\Post', 'blog_categories_posts', 'post_id', 'category_id');
     }
 }

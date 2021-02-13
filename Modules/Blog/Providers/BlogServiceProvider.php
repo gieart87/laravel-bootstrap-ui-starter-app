@@ -5,6 +5,15 @@ namespace Modules\Blog\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 
+use Modules\Blog\Repositories\Admin\Interfaces\PostRepositoryInterface;
+use Modules\Blog\Repositories\Admin\PostRepository;
+
+use Modules\Blog\Repositories\Admin\Interfaces\CategoryRepositoryInterface;
+use Modules\Blog\Repositories\Admin\CategoryRepository;
+
+use Modules\Blog\Repositories\Admin\Interfaces\TagRepositoryInterface;
+use Modules\Blog\Repositories\Admin\TagRepository;
+
 class BlogServiceProvider extends ServiceProvider
 {
     /**
@@ -28,6 +37,7 @@ class BlogServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+        $this->registerRepositories();
     }
 
     /**
@@ -109,5 +119,23 @@ class BlogServiceProvider extends ServiceProvider
             }
         }
         return $paths;
+    }
+
+    private function registerRepositories()
+    {
+        $this->app->bind(
+            PostRepositoryInterface::class,
+            PostRepository::class
+        );
+
+        $this->app->bind(
+            CategoryRepositoryInterface::class,
+            CategoryRepository::class
+        );
+
+        $this->app->bind(
+            TagRepositoryInterface::class,
+            TagRepository::class
+        );
     }
 }
