@@ -80,7 +80,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function findParentCategories()
     {
-        return Category::whereNull('parent_id')->orderBy('name', 'asc')->get();
+        return Category::with('children')->whereNull('parent_id')->orderBy('name', 'asc')->get();
     }
 
     /**
