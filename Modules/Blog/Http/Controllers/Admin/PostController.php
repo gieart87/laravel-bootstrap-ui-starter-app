@@ -4,7 +4,6 @@ namespace Modules\Blog\Http\Controllers\Admin;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-// use Illuminate\Routing\Controller;
 
 use Modules\Blog\Http\Controllers\BlogController;
 use Nwidart\Modules\Module;
@@ -30,21 +29,46 @@ class PostController extends BlogController
         $this->tagRepository = $tagRepository;
 
         $this->data['categories'] = $this->categoryRepository->findList();
+        $this->data['statuses'] = $this->postRepository->getStatuses();
+        $this->data['viewTrash'] = false;
     }
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
+        $params = $request->all();
+
         $options = [
             'per_page' => $this->perPage,
             'order' => [
                 'created_at' => 'desc',
-            ]
+            ],
+            'filter' => $params,
         ];
 
         $this->data['posts'] = $this->postRepository->findAll($options);
+        $this->data['filter'] = $params;
+
+        return view('blog::admin.posts.index', $this->data);
+    }
+
+    public function trashed(Request $request)
+    {
+        $params = $request->all();
+
+        $options = [
+            'per_page' => $this->perPage,
+            'order' => [
+                'created_at' => 'desc',
+            ],
+            'filter' => $params,
+        ];
+
+        $this->data['viewTrash'] = true;
+        $this->data['posts'] = $this->postRepository->findAllInTrash($options);
+        $this->data['filter'] = $params;
         return view('blog::admin.posts.index', $this->data);
     }
 
@@ -54,6 +78,9 @@ class PostController extends BlogController
      */
     public function create()
     {
+        $this->data['tags'] = $this->tagRepository->findList();
+        $this->data['categories'] = $this->categoryRepository->findParentCategories();
+
         return view('blog::admin.posts.form', $this->data);
     }
 
@@ -64,17 +91,12 @@ class PostController extends BlogController
      */
     public function store(PostRequest $request)
     {
-        //
-    }
+        $params = $request->validated();
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('blog::show');
+        if ($post = $this->postRepository->create($params)) {
+            return redirect('admin/blog/posts/'. $post->id .'/edit')
+                ->with('success', __('blog::posts.success_create_message'));
+        }
     }
 
     /**
@@ -90,6 +112,7 @@ class PostController extends BlogController
         $this->data['tags'] = $this->tagRepository->findList();
         $this->data['tagIds'] = $post->tags()->allRelatedIds();
         $this->data['categories'] = $this->categoryRepository->findParentCategories();
+        $this->data['categoryIds'] = $post->categories()->allRelatedIds()->toArray();
 
         return view('blog::admin.posts.form', $this->data);
     }
@@ -102,7 +125,16 @@ class PostController extends BlogController
      */
     public function update(PostRequest $request, $id)
     {
-        dd($request->all());
+        $post = $this->postRepository->findById($id);
+        $params = $request->validated();
+
+        if ($this->postRepository->update($post, $params)) {
+            return redirect('admin/blog/posts/'. $id .'/edit')
+                ->with('success', __('blog::posts.success_update_message'));
+        }
+
+        return redirect('admin/blog/posts/'. $id .'/edit')
+            ->with('error', __('blog::posts.fail_update_message'));
     }
 
     /**
@@ -110,8 +142,27 @@ class PostController extends BlogController
      * @param int $id
      * @return Renderable
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $permanentDelete = (bool)$request->get('_permanent_delete');
+
+        if ($this->postRepository->delete($id, $permanentDelete)) {
+            if ($permanentDelete) {
+                return redirect('admin/blog/posts/trashed')->with('success', __('blog::posts.success_delete_message'));
+            }
+
+            return redirect('admin/blog/posts')->with('success', __('blog::posts.success_delete_message'));
+        }
+    
+        return redirect('admin/blog/posts')->with('error', __('blog::posts.fail_delete_message'));
+    }
+
+    public function restore($id)
+    {
+        if ($this->postRepository->restore($id)) {
+            return redirect('admin/blog/posts/trashed')->with('success', __('blog::posts.success_restore_message'));
+        }
+
+        return redirect('admin/blog/posts/trashed')->with('error', __('blog::posts.fail_restore_message'));
     }
 }

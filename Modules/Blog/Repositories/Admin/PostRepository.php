@@ -2,8 +2,12 @@
 
 namespace Modules\Blog\Repositories\Admin;
 
+use Facades\Str;
+use DB;
+
 use Modules\Blog\Repositories\Admin\Interfaces\PostRepositoryInterface;
 use Modules\Blog\Entities\Post;
+use Modules\Blog\Entities\Tag;
 
 class PostRepository implements PostRepositoryInterface
 {
@@ -12,7 +16,7 @@ class PostRepository implements PostRepositoryInterface
         $perPage = $options['per_page'] ?? null;
         $orderByFields = $options['order'] ?? [];
 
-        $posts = new Post();
+        $posts = (new Post())->with('user');
 
         if ($orderByFields) {
             foreach ($orderByFields as $field => $sort) {
@@ -20,10 +24,52 @@ class PostRepository implements PostRepositoryInterface
             }
         }
 
+        if (!empty($options['filter']['q'])) {
+            $posts = $posts->where(function ($query) use ($options) {
+                $query->where('title', 'LIKE', "%{$options['filter']['q']}%")
+                    ->orWhere('body', 'LIKE', "%{$options['filter']['q']}%");
+            });
+        }
+
+        if (!empty($options['filter']['status'])) {
+            $posts = $posts->where('status', $options['filter']['status']);
+        }
+
         if ($perPage) {
             return $posts->paginate($perPage);
         }
         
+        return $posts->get();
+    }
+
+    public function findAllInTrash($options = [])
+    {
+        $perPage = $options['per_page'] ?? null;
+        $orderByFields = $options['order'] ?? [];
+
+        $posts = (new Post())->onlyTrashed()->with('user');
+
+        if ($orderByFields) {
+            foreach ($orderByFields as $field => $sort) {
+                $posts = $posts->orderBy($field, $sort);
+            }
+        }
+
+        if (!empty($options['filter']['q'])) {
+            $posts = $posts->where(function ($query) use ($options) {
+                $query->where('title', 'LIKE', "%{$options['filter']['q']}%")
+                    ->orWhere('body', 'LIKE', "%{$options['filter']['q']}%");
+            });
+        }
+
+        if (!empty($options['filter']['status'])) {
+            $posts = $posts->where('status', $options['filter']['status']);
+        }
+
+        if ($perPage) {
+            return $posts->paginate($perPage);
+        }
+
         return $posts->get();
     }
 
@@ -34,42 +80,111 @@ class PostRepository implements PostRepositoryInterface
 
     public function create($params = [])
     {
-        $params['guard_name'] = 'web';
+        $params['user_id'] = auth()->user()->id;
+        $params['post_type'] = Post::POST;
+        $params['slug'] = Str::slug($params['title']);
+        $params['code'] = $this->generateCode();
 
         return DB::transaction(function () use ($params) {
             if ($post = Post::create($params)) {
-                $permissions = !empty($params['permissions']) ? $params['permissions'] : [];
-                $post->syncPermissions($permissions);
-    
+                $this->syncCategories($post, $params);
+                $this->syncTags($post, $params);
+
                 return $post;
             }
         });
     }
 
-    public function update($id, $params = [])
+    /**
+     * Generate order code
+     *
+     * @return string
+     */
+    public static function generateCode()
     {
-        $post = Post::findOrFail($id);
+        $postCode = Str::random(10);
 
-        if ($post->name == Post::ADMIN) {
-            return true;
+        if (self::isCodeExists($postCode)) {
+            return generateOrderCode();
         }
 
-        return DB::transaction(function () use ($params, $post) {
-            $permissions = !empty($params['permissions']) ? $params['permissions'] : [];
-            $post->syncPermissions($permissions);
-        
+        return $postCode;
+    }
+
+    /**
+     * Check if the generated order code is exists
+     *
+     * @param string $orderCode order code
+     *
+     * @return void
+     */
+    private static function isCodeExists($postCode)
+    {
+        return Post::where('code', '=', $postCode)->exists();
+    }
+
+    public function update(Post $post, $params = [])
+    {
+        return DB::transaction(function () use ($post, $params) {
+            $this->syncCategories($post, $params);
+            $this->syncTags($post, $params);
+           
             return $post->update($params);
         });
     }
 
-    public function delete($id)
+    private function syncCategories($post, $params)
     {
-        $post  = Post::findOrFail($id);
+        $categoryIds = (isset($params['categories'])) ? $params['categories'] : [];
+        $post->categories()->sync($categoryIds);
+    }
 
-        if ($post->name == Post::ADMIN) {
-            return false;
+    private function syncTags($post, $params)
+    {
+        if (isset($params['tags'])) {
+            $tagIds = [];
+
+            foreach ($params['tags'] as $tag) {
+                if (!Str::isUuid($tag)) {
+                    $newTag = Tag::firstOrCreate(['name' => $tag, 'slug' => Str::slug($tag)]);
+                    $tagIds[] = $newTag->id;
+                } else {
+                    $tagIds[] = $tag;
+                }
+            }
+
+            $post->tags()->sync($tagIds);
+        }
+    }
+
+    public function delete($id, $permanentDelete = false)
+    {
+        $post  = Post::withTrashed()->findOrFail($id);
+        
+        return DB::transaction(function () use ($post, $permanentDelete) {
+            if ($permanentDelete) {
+                $post->tags()->sync([]);
+                $post->categories()->sync([]);
+
+                return $post->forceDelete();
+            }
+
+            return $post->delete();
+        });
+    }
+
+    public function restore($id)
+    {
+        $post  = Post::withTrashed()->findOrFail($id);
+        if ($post->trashed()) {
+            return $post->restore();
         }
 
-        return $post->delete();
+        return false;
+    }
+
+    public function getStatuses()
+    {
+        return Post::STATUSES;
     }
 }

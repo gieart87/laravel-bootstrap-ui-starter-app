@@ -21,6 +21,12 @@ class PostRequest extends FormRequest
 
         return [
             'title' => $title,
+            'excerpt' => '',
+            'body' => '',
+            'status' => '',
+            'publish_date' => '',
+            'tags' => '',
+            'categories' => '',
         ];
     }
 

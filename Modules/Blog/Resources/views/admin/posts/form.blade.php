@@ -67,10 +67,13 @@
                                         {!! Form::label('publish_date', __('blog::posts.publish_date_label')) !!}
 							            {!! Form::text('publish_date', !empty(old('publish_date'))? old('publish_date'): date('Y-m-d H:i:s'), ['class' => 'form-control datetimepicker', 'placeholder' => __('blog::posts.publish_date_label')]) !!}
                                     </div>
+                                    <div class="form-group">
+                                        {!! Form::label('status', __('blog::posts.status_label')) !!}
+                                        {!! Form::select('status', $statuses, !empty($post->status) ? $post->status : old('status'), ['class' => 'form-control']) !!}
+                                    </div>
                                 </div>
                                 <div class="card-footer text-right">
-                                    <button class="btn btn-light" name="draft">{{ __('blog::posts.btn_draft_label') }}</button>
-                                    <button class="btn btn-primary" name="publish">{{ __('blog::posts.btn_publish_label') }}</button>
+                                    <button class="btn btn-primary">{{ __('blog::posts.btn_save_label') }}</button>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +85,7 @@
                                     <h4>Categories</h4>
                                 </div>
                                 <div class="card-body">
-                                    @include('blog::admin.posts._nested_categories')
+                                    @include('blog::admin.posts._nested_categories', ['categoryIds' => !empty($categoryIds) ? $categoryIds : []])
                                 </div>
                             </div>
                         </div>

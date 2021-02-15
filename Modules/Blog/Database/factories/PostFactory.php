@@ -29,6 +29,7 @@ class PostFactory extends Factory
             'title' => $title,
             'slug' => Str::slug($title),
             'post_type' => 'Post',
+            'code' => Str::random(10),
             'publish_date' => date('Y-m-d H:i:s'),
             'status' => 1,
             'excerpt' => $this->faker->paragraph(),

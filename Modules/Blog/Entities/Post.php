@@ -4,16 +4,18 @@ namespace Modules\Blog\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 
 use App\Models\Concerns\UuidTrait;
 
 class Post extends Model
 {
-    use HasFactory, UuidTrait;
+    use HasFactory, UuidTrait, SoftDeletes;
 
     protected $fillable = [
         'post_type',
+        'code',
         'title',
         'slug',
         'excerpt',
