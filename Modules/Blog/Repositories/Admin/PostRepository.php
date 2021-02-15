@@ -102,7 +102,7 @@ class PostRepository implements PostRepositoryInterface
      */
     public static function generateCode()
     {
-        $postCode = Str::random(10);
+        $postCode = Str::random(12);
 
         if (self::isCodeExists($postCode)) {
             return generateOrderCode();
