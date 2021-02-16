@@ -17,7 +17,7 @@ class UserRepository implements UserRepositoryInterface
         $perPage = $options['per_page'] ?? null;
         $orderByFields = $options['order'] ?? [];
 
-        $users = new User();
+        $users = (new User())->with('roles');
 
         if ($orderByFields) {
             foreach ($orderByFields as $field => $sort) {
