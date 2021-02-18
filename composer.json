@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.5",
         "laravelcollective/html": "^6.2",
         "nwidart/laravel-modules": "^8.2",
+        "spatie/laravel-medialibrary": "^9.4",
         "spatie/laravel-permission": "^3.17",
         "squizlabs/php_codesniffer": "^3.5"
     },

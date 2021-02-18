@@ -27,6 +27,7 @@ class PostRequest extends FormRequest
             'publish_date' => '',
             'tags' => '',
             'categories' => '',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:4096',
         ];
     }
 
