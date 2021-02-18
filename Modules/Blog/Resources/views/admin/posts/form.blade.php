@@ -12,7 +12,7 @@
         {!! Form::model($post, ['url' => ['admin/blog/posts', $post->id], 'method' => 'PUT', 'files' => true ]) !!}
         {!! Form::hidden('id') !!}
     @else
-        {!! Form::open(['url' => 'admin/blog/posts','files'=>true]) !!}
+        {!! Form::open(['url' => 'admin/blog/posts', 'files'=>true]) !!}
     @endif
     @csrf
         <div class="section-body">
@@ -111,7 +111,14 @@
                                     <h4>Featured Image</h4>
                                 </div>
                                 <div class="card-body">
-        
+                                    @if ($post->featured_image)
+                                    <div class="form-group">
+                                        <img src="{{ $post->featured_image }}" alt="{{ $post->featured_image_caption }}" class="img-fluid img-thumbnail"/>
+                                    </div>
+                                    @endif
+                                    <div class="form-group">
+                                        <input type="file" name="image" class="form-control"/>
+                                    </div>
                                 </div>
                             </div>
                         </div>

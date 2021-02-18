@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+
 use App\Models\Concerns\UuidTrait;
 
-class Post extends Model
+class Post extends Model implements HasMedia
 {
-    use HasFactory, UuidTrait, SoftDeletes;
+    use HasFactory, UuidTrait, SoftDeletes, InteractsWithMedia;
 
     protected $fillable = [
         'post_type',

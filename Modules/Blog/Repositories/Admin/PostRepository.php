@@ -87,6 +87,7 @@ class PostRepository implements PostRepositoryInterface
 
         return DB::transaction(function () use ($params) {
             if ($post = Post::create($params)) {
+                $this->setFeaturedImage($post, $params);
                 $this->syncCategories($post, $params);
                 $this->syncTags($post, $params);
 
@@ -126,11 +127,25 @@ class PostRepository implements PostRepositoryInterface
     public function update(Post $post, $params = [])
     {
         return DB::transaction(function () use ($post, $params) {
+            $this->setFeaturedImage($post, $params);
             $this->syncCategories($post, $params);
             $this->syncTags($post, $params);
            
             return $post->update($params);
         });
+    }
+
+    private function setFeaturedImage($post, $params)
+    {
+        if (isset($params['image'])) {
+            $post->clearMediaCollection('images');
+
+            $post->addMediaFromRequest('image')->toMediaCollection('images');
+            $post->featured_image = $post->getFirstMedia('images')->getUrl();
+            $post->featured_image_caption = $post->getFirstMedia('images')->name;
+
+            $post->save();
+        }
     }
 
     private function syncCategories($post, $params)
