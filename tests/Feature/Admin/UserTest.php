@@ -43,10 +43,10 @@ class UserTest extends TestCase
     private function setupPermissions()
     {
         $permissions = [
-            'view_roles',
-            'add_roles',
-            'edit_roles',
-            'delete_roles',
+            'view_users',
+            'add_users',
+            'edit_users',
+            'delete_users',
         ];
         
         foreach ($permissions as $permission) {
@@ -103,7 +103,7 @@ class UserTest extends TestCase
 
 
     /**
-     * Test admin can add a role
+     * Test admin can add a user
      *
      * @return void
      */
@@ -132,7 +132,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * Test admin can update a category
+     * Test admin can update a user
      *
      * @return void
      */
@@ -163,7 +163,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * Test admin can delete a category
+     * Test admin can delete a user
      *
      * @return void
      */
@@ -188,7 +188,7 @@ class UserTest extends TestCase
     // ==================
 
     /**
-     * Test admin can not add a role with blank name
+     * Test admin can not add a user with blank name
      *
      * @return void
      */
@@ -210,7 +210,7 @@ class UserTest extends TestCase
     }
     
     /**
-     * Test admin can not add a duplicated role
+     * Test admin can not add a duplicated user email
      *
      * @return void
      */

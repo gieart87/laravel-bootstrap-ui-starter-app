@@ -131,7 +131,7 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test admin can update a category
+     * Test admin can update a role
      *
      * @return void
      */
@@ -159,7 +159,7 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test admin can delete a category
+     * Test admin can delete a role
      *
      * @return void
      */

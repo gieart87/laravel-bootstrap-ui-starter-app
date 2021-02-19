@@ -10,9 +10,12 @@ use App\Repositories\Admin\Interfaces\RoleRepositoryInterface;
 use App\Repositories\Admin\Interfaces\PermissionRepositoryInterface;
 
 use App\Models\Role;
+use App\Authorizable;
 
 class RoleController extends Controller
 {
+    use Authorizable;
+
     private $roleRepository;
     private $permissionRepository;
 

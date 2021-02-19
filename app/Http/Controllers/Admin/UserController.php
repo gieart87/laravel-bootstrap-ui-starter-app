@@ -12,8 +12,12 @@ use App\Repositories\Admin\Interfaces\RoleRepositoryInterface;
 use App\Repositories\Admin\Interfaces\PermissionRepositoryInterface;
 use App\Repositories\Admin\Interfaces\UserRepositoryInterface;
 
+use App\Authorizable;
+
 class UserController extends Controller
 {
+    use Authorizable;
+
     private $roleRepository;
     private $permissionRepository;
     private $userRepository;
