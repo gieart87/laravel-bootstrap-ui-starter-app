@@ -21,7 +21,7 @@
         <div class="section-body">
             <h2 class="section-title">{{ empty($role) ? __('roles.role_add_new') : __('roles.role_update') }}</h2>
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                     <div class="card">
                         <div class="card-header">
                             <h4>{{ empty($role) ? __('roles.add_card_title') : __('roles.update_card_title') }}</h4>
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-8">
+                <div class="col-lg-9">
                     <div class="card">
                         <div class="card-header">
                             <h4>{{ __('roles.set_role_permissions_label') }}</h4>
