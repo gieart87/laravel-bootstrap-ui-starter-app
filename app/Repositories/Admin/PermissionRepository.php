@@ -35,7 +35,7 @@ class PermissionRepository implements PermissionRepositoryInterface
 
     public function create($params = [])
     {
-        return Permission::create($params);
+        return Permission::firstOrCreate($params);
     }
 
     public function update($id, $params = [])

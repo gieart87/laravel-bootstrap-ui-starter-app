@@ -26,5 +26,6 @@
             "name": "Categories",
             "route": "admin/blog/categories"
         }
-    ]
+    ],
+    "permissions": ["blog-posts", "blog-categories", "blog-pages"]
 }

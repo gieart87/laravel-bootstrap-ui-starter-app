@@ -35,6 +35,11 @@ class RoleRepository implements RoleRepositoryInterface
         return Role::findOrFail($id);
     }
 
+    public function findByName($name)
+    {
+        return  Role::findOrCreate($name);
+    }
+
     public function create($params = [])
     {
         $params['guard_name'] = 'web';
