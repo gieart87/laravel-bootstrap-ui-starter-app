@@ -111,7 +111,7 @@
                                     <h4>Featured Image</h4>
                                 </div>
                                 <div class="card-body">
-                                    @if ($post->featured_image)
+                                    @if (!empty($post) && $post->featured_image)
                                     <div class="form-group">
                                         <img src="{{ $post->featured_image }}" alt="{{ $post->featured_image_caption }}" class="img-fluid img-thumbnail"/>
                                     </div>

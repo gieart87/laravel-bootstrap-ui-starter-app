@@ -48,18 +48,18 @@ class AdminRepositoryServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerModuleAdminMenus();
+        $this->initModules();
     }
 
-    private function registerModuleAdminMenus()
+    private function initModules()
     {
         $modules = Module::getOrdered();
         $moduleAdminMenus = [];
 
         if ($modules) {
             foreach ($modules as $module) {
-                $moduleJson = $module->getPath(). '/module.json';
-                $moduleDetails = json_decode(file_get_contents($moduleJson), true);
+                $this->initModulePermissions($module);
+                $moduleDetails = $this->getModuleDetails($module);
 
                 $moduleAdminMenus[] = [
                     'module' => $module->getLowerName(),
@@ -69,5 +69,37 @@ class AdminRepositoryServiceProvider extends ServiceProvider
         }
 
         View::share('moduleAdminMenus', $moduleAdminMenus);
+    }
+
+    private function getModuleDetails($module)
+    {
+        $moduleJson = $module->getPath(). '/module.json';
+        return json_decode(file_get_contents($moduleJson), true);
+    }
+
+    private function initModulePermissions($module)
+    {
+        $moduleDetails = $this->getModuleDetails($module);
+        if (!empty($moduleDetails['permissions'])) {
+            foreach ($moduleDetails['permissions'] as $permission) {
+                $this->initPermissionActions($permission);
+            }
+        }
+    }
+
+    private function initPermissionActions($permission)
+    {
+        $permissionMappings = ['view', 'add', 'edit', 'delete'];
+        $permissionRepository = new PermissionRepository();
+        $roleRepository = new RoleRepository();
+
+        $permissionActions = [];
+        foreach ($permissionMappings as $permissionMapping) {
+            $name = $permissionMapping . '_' . $permission;
+            $permissionActions[] = $permissionRepository->create(['name' => $name]);
+        }
+
+        $adminRole = $roleRepository->findByName('admin');
+        $adminRole->givePermissionTo($permissionActions);
     }
 }

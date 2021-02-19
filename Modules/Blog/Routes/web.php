@@ -15,9 +15,9 @@ Route::prefix('blog')->group(function () {
     Route::get('/', 'BlogController@index');
 });
 
-Route::prefix('admin/blog')->namespace('\Modules\Blog\Http\Controllers\Admin')->middleware(['auth'])->group(function () { // phpcs:ignore
+Route::prefix('admin/blog')->as('blog-')->namespace('\Modules\Blog\Http\Controllers\Admin')->middleware(['auth'])->group(function () { // phpcs:ignore
     
-    Route::get('posts/trashed', 'PostController@trashed');
-    Route::get('posts/{id}/restore', 'PostController@restore');
+    Route::get('posts/trashed', 'PostController@trashed')->name('posts.trashed');
+    Route::get('posts/{id}/restore', 'PostController@restore')->name('posts.restore');
     Route::resource('posts', 'PostController');
 });

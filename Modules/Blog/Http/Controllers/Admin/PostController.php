@@ -13,8 +13,12 @@ use Modules\Blog\Repositories\Admin\Interfaces\PostRepositoryInterface;
 use Modules\Blog\Repositories\Admin\Interfaces\CategoryRepositoryInterface;
 use Modules\Blog\Repositories\Admin\Interfaces\TagRepositoryInterface;
 
+use App\Authorizable;
+
 class PostController extends BlogController
 {
+    use Authorizable;
+
     private $postRepository;
     private $categoryRepository;
     private $tagRepository;
