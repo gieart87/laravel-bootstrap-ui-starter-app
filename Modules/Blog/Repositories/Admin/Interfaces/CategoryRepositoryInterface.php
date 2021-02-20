@@ -5,13 +5,13 @@ namespace Modules\Blog\Repositories\Admin\Interfaces;
 interface CategoryRepositoryInterface
 {
     /**
-     * Paginated collection
+     * Category collection
      *
-     * @param int $perPage per page items
+     * @param $options conditions and sort
      *
      * @return Collection
      */
-    public function paginate(int $perPage);
+    public function findAll($options = []);
 
     /**
      * Find single record by id
@@ -29,9 +29,9 @@ interface CategoryRepositoryInterface
      *
      * @return array
      */
-    public function findList(int $exceptCategoryId = null);
+    public function findList($exceptCategoryId = null);
 
-    public function findNestedList();
+    public function findNestedList($exceptCategoryId = null);
 
     public function findParentCategories();
 

@@ -2,21 +2,44 @@
 
 namespace Modules\Blog\Repositories\Admin;
 
+use Illuminate\Support\Str;
+
 use Modules\Blog\Repositories\Admin\Interfaces\CategoryRepositoryInterface;
 use Modules\Blog\Entities\Category;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
-    /**
-     * Paginated collection
+     /**
+     * Category collection
      *
-     * @param int $perPage per page items
+     * @param $options conditions and sort
      *
      * @return Collection
      */
-    public function paginate($perPage)
+    public function findAll($options = [])
     {
-        return Category::orderBy('name', 'ASC')->paginate($perPage);
+        $perPage = $options['per_page'] ?? null;
+        $orderByFields = $options['order'] ?? [];
+
+        $categories = (new Category())->with('parent');
+
+        if ($orderByFields) {
+            foreach ($orderByFields as $field => $sort) {
+                $categories = $categories->orderBy($field, $sort);
+            }
+        }
+
+        if (!empty($options['filter']['q'])) {
+            $categories = $categories->where(function ($query) use ($options) {
+                $query->where('name', 'LIKE', "%{$options['filter']['q']}%");
+            });
+        }
+
+        if ($perPage) {
+            return $categories->paginate($perPage);
+        }
+        
+        return $categories->get();
     }
 
     /**
@@ -51,27 +74,32 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $categories->pluck('name', 'id');
     }
 
-    public function findNestedList()
+    public function findNestedList($exceptCategoryId = null)
     {
-        $categories = Category::whereNull('parent_id')->orderBy('name', 'asc')->get();
+        $categories = Category::with('children')
+            ->whereNull('parent_id')
+            ->where('id', '!=', $exceptCategoryId)
+            ->orderBy('name', 'asc')->get();
 
         $nestedCategories = [];
         foreach ($categories as $category) {
             $nestedCategories[$category->id] = $category->name;
-            $nestedCategories = array_merge($nestedCategories, $this->getChildren($category, 0));
+            $nestedCategories = array_merge($nestedCategories, $this->getChildren($category, 0, $exceptCategoryId));
         }
 
         return $nestedCategories;
     }
 
-    private function getChildren($category, $level = 0)
+    private function getChildren($category, $level = 0, $exceptCategoryId = null)
     {
         $nestedCategories = [];
         if ($category->children->count()) {
             $level++;
             foreach ($category->children as $child) {
-                $nestedCategories[$child->id] = str_repeat('-', $level * 2) . ' ' . $child->name;
-                $nestedCategories = array_merge($nestedCategories, $this->getChildren($child, $level));
+                if ($child->id != $exceptCategoryId) {
+                    $nestedCategories[$child->id] = str_repeat('-', $level * 2) . ' ' . $child->name;
+                    $nestedCategories = array_merge($nestedCategories, $this->getChildren($child, $level));
+                }
             }
         }
        
