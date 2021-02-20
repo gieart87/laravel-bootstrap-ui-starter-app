@@ -17,14 +17,14 @@
             "route": "admin/blog/posts"
         },
         {
-            "icon": "fa fa-file",
-            "name": "Pages",
-            "route": "admin/blog/pages"
-        },
-        {
             "icon": "fa fa-bars",
             "name": "Categories",
             "route": "admin/blog/categories"
+        },
+        {
+            "icon": "fa fa-file",
+            "name": "Pages",
+            "route": "admin/blog/pages"
         }
     ],
     "permissions": ["blog-posts", "blog-categories", "blog-pages"]
