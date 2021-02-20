@@ -49,8 +49,8 @@ class Post extends Model implements HasMedia
     public const ACTIVE = 1;
     public const INACTIVE = 2;
     
-    public const POST = 'Post';
-    public const PAGE = 'Page';
+    public const POST = 'post';
+    public const PAGE = 'page';
 
     public const STATUSES = [
         self::DRAFT => 'draft',
