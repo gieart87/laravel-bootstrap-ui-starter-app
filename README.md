@@ -2,6 +2,15 @@
 
 Laravel8-Starter-App is a boilerplate project based on Laravel 8 Framework that you can start your project with.
 
+### Installation
+- Open terminal and clone the repo : `git clone git@github.com:gieart87/laravel8-bootstrap-ui-starter-app.git`
+- Go the project directory and copy the `env.example` to `.env` file
+- Update the `.env` file as you need. Espesially the database config
+- Run `composer install`
+- Run `php artisan db:seed` and follow the instructions (just answer some simple questions). You will see the admin email for login at the end of this process. The default password is `password`
+- Run `php artisan serve`
+- Open the browser and type `http://localhost:8000`
+
 ### Reference Tutorials
 
 - **[Laravel 8 Auth with Boostrap UI](https://www.youtube.com/watch?v=NuGBzmHlINQ)**
