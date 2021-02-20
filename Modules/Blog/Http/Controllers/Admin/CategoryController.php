@@ -25,7 +25,6 @@ class CategoryController extends BlogController
         $this->data['currentAdminMenu'] = 'categories';
 
         $this->categoryRepository = $categoryRepository;
-        $this->data['parentCategories'] = $this->categoryRepository->findParentCategories();
     }
     /**
      * Display a listing of the resource.

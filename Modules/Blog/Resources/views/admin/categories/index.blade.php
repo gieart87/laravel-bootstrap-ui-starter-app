@@ -37,7 +37,7 @@
                                             <td>{{ $category->updated_at_formatted }}</td>
                                             <td>
                                                 <a class="btn btn-sm btn-success" href="{{ url('admin/blog/categories/'. $category->id .'/edit')}}"><i class="far fa-edit"></i> @lang('blog::categories.btn_edit_label') </a>
-                                                <a href="{{ url('admin/blog/categories/'. $category->id) }}" class="btn btn-sm btn-warning" onclick="
+                                                <a href="{{ url('admin/blog/categories/'. $category->id) }}" class="btn btn-sm btn-danger" onclick="
                                                     event.preventDefault();
                                                     if (confirm('Do you want to remove this?')) {
                                                         document.getElementById('delete-role-{{ $category->id }}').submit();

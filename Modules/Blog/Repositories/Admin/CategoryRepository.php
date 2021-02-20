@@ -21,7 +21,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $perPage = $options['per_page'] ?? null;
         $orderByFields = $options['order'] ?? [];
 
-        $categories = new Category();
+        $categories = (new Category())->with('parent');
 
         if ($orderByFields) {
             foreach ($orderByFields as $field => $sort) {
@@ -76,7 +76,8 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function findNestedList($exceptCategoryId = null)
     {
-        $categories = Category::whereNull('parent_id')
+        $categories = Category::with('children')
+            ->whereNull('parent_id')
             ->where('id', '!=', $exceptCategoryId)
             ->orderBy('name', 'asc')->get();
 
