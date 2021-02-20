@@ -25,8 +25,6 @@ class Permission extends SpatiePermission
     public static function defaultPermissions()
     {
         return [
-            'view_dashboard',
-
             'view_users',
             'add_users',
             'edit_users',

@@ -58,7 +58,6 @@ class AdminRepositoryServiceProvider extends ServiceProvider
 
         if ($modules) {
             foreach ($modules as $module) {
-                $this->initModulePermissions($module);
                 $moduleDetails = $this->getModuleDetails($module);
 
                 $moduleAdminMenus[] = [
@@ -75,31 +74,5 @@ class AdminRepositoryServiceProvider extends ServiceProvider
     {
         $moduleJson = $module->getPath(). '/module.json';
         return json_decode(file_get_contents($moduleJson), true);
-    }
-
-    private function initModulePermissions($module)
-    {
-        $moduleDetails = $this->getModuleDetails($module);
-        if (!empty($moduleDetails['permissions'])) {
-            foreach ($moduleDetails['permissions'] as $permission) {
-                $this->initPermissionActions($permission);
-            }
-        }
-    }
-
-    private function initPermissionActions($permission)
-    {
-        $permissionMappings = ['view', 'add', 'edit', 'delete'];
-        $permissionRepository = new PermissionRepository();
-        $roleRepository = new RoleRepository();
-
-        $permissionActions = [];
-        foreach ($permissionMappings as $permissionMapping) {
-            $name = $permissionMapping . '_' . $permission;
-            $permissionActions[] = $permissionRepository->create(['name' => $name]);
-        }
-
-        $adminRole = $roleRepository->findByName('admin');
-        $adminRole->givePermissionTo($permissionActions);
     }
 }

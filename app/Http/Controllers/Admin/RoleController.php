@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
+use Nwidart\Modules\Facades\Module;
+
 use App\Http\Requests\Admin\RoleRequest;
 
 use App\Repositories\Admin\Interfaces\RoleRepositoryInterface;
@@ -54,6 +56,7 @@ class RoleController extends Controller
      */
     public function create()
     {
+        $this->initModules();
         $this->data['permissions'] = $this->permissionRepository->findAll();
         return view('admin.roles.form', $this->data);
     }
@@ -97,6 +100,7 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
+        $this->initModules();
         $role = $this->roleRepository->findById($id);
 
         $this->data['role'] = $role;
@@ -143,5 +147,48 @@ class RoleController extends Controller
 
         return redirect('admin/roles')
                 ->with('error', __('roles.fail_to_delete_message', ['name' => $role->name]));
+    }
+
+
+    private function initModules()
+    {
+        $modules = Module::getOrdered();
+        $moduleAdminMenus = [];
+
+        if ($modules) {
+            foreach ($modules as $module) {
+                $this->initModulePermissions($module);
+            }
+        }
+    }
+
+    private function getModuleDetails($module)
+    {
+        $moduleJson = $module->getPath(). '/module.json';
+        return json_decode(file_get_contents($moduleJson), true);
+    }
+
+    private function initModulePermissions($module)
+    {
+        $moduleDetails = $this->getModuleDetails($module);
+        if (!empty($moduleDetails['permissions'])) {
+            foreach ($moduleDetails['permissions'] as $permission) {
+                $this->initPermissionActions($permission);
+            }
+        }
+    }
+
+    private function initPermissionActions($permission)
+    {
+        $permissionMappings = ['view', 'add', 'edit', 'delete'];
+
+        $permissionActions = [];
+        foreach ($permissionMappings as $permissionMapping) {
+            $name = $permissionMapping . '_' . $permission;
+            $permissionActions[] = $this->permissionRepository->create(['name' => $name]);
+        }
+
+        $adminRole = $this->roleRepository->findByName('admin');
+        $adminRole->givePermissionTo($permissionActions);
     }
 }
