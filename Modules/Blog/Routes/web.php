@@ -20,4 +20,6 @@ Route::prefix('admin/blog')->as('blog-')->namespace('\Modules\Blog\Http\Controll
     Route::get('posts/trashed', 'PostController@trashed')->name('posts.trashed');
     Route::get('posts/{id}/restore', 'PostController@restore')->name('posts.restore');
     Route::resource('posts', 'PostController');
+
+    Route::resource('categories', 'CategoryController');
 });
