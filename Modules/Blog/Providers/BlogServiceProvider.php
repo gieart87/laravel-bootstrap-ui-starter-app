@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Factory;
 use Modules\Blog\Repositories\Admin\Interfaces\PostRepositoryInterface;
 use Modules\Blog\Repositories\Admin\PostRepository;
 
+use Modules\Blog\Repositories\Admin\Interfaces\PageRepositoryInterface;
+use Modules\Blog\Repositories\Admin\PageRepository;
+
 use Modules\Blog\Repositories\Admin\Interfaces\CategoryRepositoryInterface;
 use Modules\Blog\Repositories\Admin\CategoryRepository;
 
@@ -126,6 +129,11 @@ class BlogServiceProvider extends ServiceProvider
         $this->app->bind(
             PostRepositoryInterface::class,
             PostRepository::class
+        );
+
+        $this->app->bind(
+            PageRepositoryInterface::class,
+            PageRepository::class
         );
 
         $this->app->bind(
