@@ -17,12 +17,16 @@
             <button class="btn btn-block btn-primary btn-filter"><i class="fas fa-search"></i> {{ __('general.btn_search_label') }}</button>
         </div>
         <div class="form-group col-md-2">
-            <a href="{{ url('admin/blog/pages/create') }}" class="btn btn-icon btn-block icon-left btn-success btn-filter"><i class="fas fa-plus-circle"></i> @lang('blog::pages.btn_create_label')</a>
+            @can('add_blog-pages')
+                <a href="{{ url('admin/blog/pages/create') }}" class="btn btn-icon btn-block icon-left btn-success btn-filter"><i class="fas fa-plus-circle"></i> @lang('blog::pages.btn_create_label')</a>
+            @endcan
         </div>
         <div class="form-group col-md-2">
-            @if (!$viewTrash)
-                <a href="{{ url('admin/blog/pages/trashed') }}" class="btn btn-icon btn-block icon-left btn-light btn-filter"><i class="fas fa-trash"></i> @lang('blog::pages.btn_show_trashed_label')</a>
-            @endif
+            @can('delete_blog-pages')
+                @if (!$viewTrash)
+                    <a href="{{ url('admin/blog/pages/trashed') }}" class="btn btn-icon btn-block icon-left btn-light btn-filter"><i class="fas fa-trash"></i> @lang('blog::pages.btn_show_trashed_label')</a>
+                @endif
+            @endcan
         </div>
     </div>
 {!! Form::close() !!}

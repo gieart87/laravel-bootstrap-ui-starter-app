@@ -35,33 +35,41 @@
                                             <td>{{ $page->updated_at_formatted }}</td>
                                             <td>
                                                 @if ($page->trashed())
-                                                    <a class="btn btn-sm btn-warning" href="{{ url('admin/blog/pages/'. $page->id .'/restore')}}"><i class="fa fa-sync-alt"></i> @lang('blog::pages.btn_restore_label') </a>
-                                                    <a href="{{ url('admin/blog/pages/'. $page->id) }}" class="btn btn-sm btn-danger" onclick="
-                                                        event.preventDefault();
-                                                        if (confirm('Do you want to remove this permanently?')) {
-                                                            document.getElementById('delete-role-{{ $page->id }}').submit();
-                                                        }">
-                                                        <i class="far fa-trash-alt"></i> @lang('blog::pages.btn_delete_permanent_label')
-                                                    </a>
-                                                    <form id="delete-role-{{ $page->id }}" action="{{ url('admin/blog/pages/'. $page->id) }}" method="POST">
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <input type="hidden" name="_permanent_delete" value="TRUE">
-                                                        @csrf
-                                                    </form>
+                                                    @can('delete_blog-pages')
+                                                        <a class="btn btn-sm btn-warning" href="{{ url('admin/blog/pages/'. $page->id .'/restore')}}"><i class="fa fa-sync-alt"></i> @lang('blog::pages.btn_restore_label') </a>
+                                                        <a href="{{ url('admin/blog/pages/'. $page->id) }}" class="btn btn-sm btn-danger" onclick="
+                                                            event.preventDefault();
+                                                            if (confirm('Do you want to remove this permanently?')) {
+                                                                document.getElementById('delete-role-{{ $page->id }}').submit();
+                                                            }">
+                                                            <i class="far fa-trash-alt"></i> @lang('blog::pages.btn_delete_permanent_label')
+                                                        </a>
+                                                        <form id="delete-role-{{ $page->id }}" action="{{ url('admin/blog/pages/'. $page->id) }}" method="POST">
+                                                            <input type="hidden" name="_method" value="DELETE">
+                                                            <input type="hidden" name="_permanent_delete" value="TRUE">
+                                                            @csrf
+                                                        </form>
+                                                    @endcan
                                                 @else
-                                                    <a class="btn btn-sm btn-info" href="{{ url('post/'. $page->id )}}"><i class="far fa-eye"></i> @lang('blog::pages.btn_show_label') </a>
-                                                    <a class="btn btn-sm btn-success" href="{{ url('admin/blog/pages/'. $page->id .'/edit')}}"><i class="far fa-edit"></i> @lang('blog::pages.btn_edit_label') </a>
-                                                    <a href="{{ url('admin/blog/pages/'. $page->id) }}" class="btn btn-sm btn-warning" onclick="
-                                                        event.preventDefault();
-                                                        if (confirm('Do you want to remove this?')) {
-                                                            document.getElementById('delete-role-{{ $page->id }}').submit();
-                                                        }">
-                                                        <i class="far fa-trash-alt"></i> @lang('blog::pages.btn_delete_label')
-                                                    </a>
-                                                    <form id="delete-role-{{ $page->id }}" action="{{ url('admin/blog/pages/'. $page->id) }}" method="POST">
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        @csrf
-                                                    </form>
+                                                    @can('view_blog-pages')
+                                                        <a class="btn btn-sm btn-info" href="{{ url('post/'. $page->id )}}"><i class="far fa-eye"></i> @lang('blog::pages.btn_show_label') </a>
+                                                    @endcan
+                                                    @can('edit_blog-pages')
+                                                        <a class="btn btn-sm btn-success" href="{{ url('admin/blog/pages/'. $page->id .'/edit')}}"><i class="far fa-edit"></i> @lang('blog::pages.btn_edit_label') </a>
+                                                    @endcan
+                                                    @can('delete_blog-pages')
+                                                        <a href="{{ url('admin/blog/pages/'. $page->id) }}" class="btn btn-sm btn-warning" onclick="
+                                                            event.preventDefault();
+                                                            if (confirm('Do you want to remove this?')) {
+                                                                document.getElementById('delete-role-{{ $page->id }}').submit();
+                                                            }">
+                                                            <i class="far fa-trash-alt"></i> @lang('blog::pages.btn_delete_label')
+                                                        </a>
+                                                        <form id="delete-role-{{ $page->id }}" action="{{ url('admin/blog/pages/'. $page->id) }}" method="POST">
+                                                            <input type="hidden" name="_method" value="DELETE">
+                                                            @csrf
+                                                        </form>
+                                                    @endcan
                                                 @endif
                                             </td>
                                         </tr>
