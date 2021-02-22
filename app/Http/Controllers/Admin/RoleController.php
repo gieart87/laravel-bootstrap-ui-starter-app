@@ -56,7 +56,6 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $this->initModules();
         $this->data['permissions'] = $this->permissionRepository->findAll();
         return view('admin.roles.form', $this->data);
     }
@@ -100,7 +99,6 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        $this->initModules();
         $role = $this->roleRepository->findById($id);
 
         $this->data['role'] = $role;
@@ -147,6 +145,18 @@ class RoleController extends Controller
 
         return redirect('admin/roles')
                 ->with('error', __('roles.fail_to_delete_message', ['name' => $role->name]));
+    }
+
+    public function reloadPermissions($roleId = null)
+    {
+        $this->initModules();
+        if ($roleId) {
+            return redirect('admin/roles/'. $roleId . '/edit')
+            ->with('success', __('roles.success_relaod_permission_message'));
+        }
+        
+        return redirect('admin/roles/create')
+            ->with('success', __('roles.success_relaod_permission_message'));
     }
 
 

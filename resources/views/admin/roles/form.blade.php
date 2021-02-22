@@ -51,6 +51,12 @@
                         <div class="card-body">
                             @include('admin.roles._permissions', ['disabled' => $disabled ?? ''])
                         </div>
+                        <div class="card-footer text-right">
+                            @php
+                                $roleId = empty($role) ? null : $role->id;
+                            @endphp
+                            <a href="{{ url('admin/roles/reload-permissions/' . $roleId ) }}" class="btn btn-icon icon-left btn-primary"><i class="fa fa-sync-alt"></i> @lang('roles.btn_reload_permissions_label')</a>
+                        </div>
                     </div>
                 </div>
             </div>

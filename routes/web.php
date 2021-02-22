@@ -28,6 +28,8 @@ Route::get('/home', function () {
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard.index');
 
+    Route::get('roles/reload-permissions/{id}', [AdminRole::class, 'reloadPermissions'])->name('roles.update');
+    Route::get('roles/reload-permissions', [AdminRole::class, 'reloadPermissions'])->name('roles.update');
     Route::resource('roles', AdminRole::class);
     Route::resource('users', AdminUser::class);
 });
