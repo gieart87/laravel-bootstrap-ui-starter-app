@@ -8,6 +8,7 @@ Laravel8-Starter-App is a boilerplate project based on Laravel 8 Framework that 
 - Update the `.env` file as you need. Especially the database config
 - Run `composer install`
 - Run `php artisan db:seed` and follow the instructions (just answer some simple questions). You will see the admin email for login at the end of this process. The default password is `password`
+- Run `php artisan key:generate`
 - Run `php artisan serve`
 - Open the browser and type `http://localhost:8000`
 
