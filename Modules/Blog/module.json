@@ -14,17 +14,20 @@
         {
             "icon": "fa fa-edit",
             "name": "Posts",
-            "route": "admin/blog/posts"
+            "route": "admin/blog/posts",
+            "permission": "view_blog-posts"
         },
         {
             "icon": "fa fa-bars",
             "name": "Categories",
-            "route": "admin/blog/categories"
+            "route": "admin/blog/categories",
+            "permission": "view_blog-categories"
         },
         {
             "icon": "fa fa-file",
             "name": "Pages",
-            "route": "admin/blog/pages"
+            "route": "admin/blog/pages",
+            "permission": "view_blog-pages"
         }
     ],
     "permissions": ["blog-posts", "blog-categories", "blog-pages"]

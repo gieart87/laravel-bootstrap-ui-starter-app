@@ -175,7 +175,8 @@ class PostRepository implements PostRepositoryInterface
     public function delete($id, $permanentDelete = false)
     {
         $post  = Post::withTrashed()->findOrFail($id);
-        
+        $this->checkUserCanDeletePost($post);
+
         return DB::transaction(function () use ($post, $permanentDelete) {
             if ($permanentDelete) {
                 $post->tags()->sync([]);
@@ -186,6 +187,18 @@ class PostRepository implements PostRepositoryInterface
 
             return $post->delete();
         });
+    }
+
+    private function checkUserCanDeletePost($post)
+    {
+        $currentUser = auth()->user();
+        $canDeletePost = $currentUser->hasRole('admin') || ($post->user_id == $currentUser->id);
+
+        if ($canDeletePost) {
+            return;
+        }
+
+        abort(403, __('blog::posts.fail_delete_message'));
     }
 
     public function restore($id)

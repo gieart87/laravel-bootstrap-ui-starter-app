@@ -13,7 +13,9 @@
             <button class="btn btn-block btn-primary btn-filter"><i class="fas fa-search"></i> {{ __('general.btn_search_label') }}</button>
         </div>
         <div class="form-group col-md-2">
-            <a href="{{ url('admin/users/create') }}" class="btn btn-block btn-icon icon-left btn-success btn-filter"><i class="fas fa-plus-circle"></i> @lang('general.btn_create_label')</a>
+            @can('add_users')
+                <a href="{{ url('admin/users/create') }}" class="btn btn-block btn-icon icon-left btn-success btn-filter"><i class="fas fa-plus-circle"></i> @lang('general.btn_create_label')</a>
+            @endcan
         </div>
     </div>
 </form>
