@@ -28,6 +28,7 @@ class Post extends Model implements HasMedia
         'featured_image',
         'featured_image_caption',
         'user_id',
+        'metas',
     ];
 
     /**
@@ -58,8 +59,29 @@ class Post extends Model implements HasMedia
         self::INACTIVE => 'inactive',
     ];
 
+    public const META_KEYWORDS = 'keywords';
+    public const META_DESCRIPTION = 'description';
+    public const META_FIELDS = [
+        self::META_KEYWORDS => [
+            'field_name' => 'keywords[]',
+            'label' => 'Keywords',
+            'type' => 'select',
+            'class' => 'form-control select2-tags',
+            'multiple' => true,
+            'validation_rules' => '',
+        ],
+        self::META_DESCRIPTION => [
+            'field_name' => 'description',
+            'label' => 'Description',
+            'type' => 'textarea',
+            'class' => 'form-control',
+            'validation_rules' => '',
+        ],
+    ];
+
     public $casts = [
         'publish_date' => 'datetime:d, M Y H:i',
+        'metas' => 'array',
     ];
 
     public function user()

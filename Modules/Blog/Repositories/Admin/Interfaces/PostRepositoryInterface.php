@@ -14,4 +14,5 @@ interface PostRepositoryInterface
     public function delete($id, $permanentDelete = false);
     public function restore($id);
     public function getStatuses();
+    public function getMetaFields();
 }

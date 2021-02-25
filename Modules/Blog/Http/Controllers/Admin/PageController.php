@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use Modules\Blog\Http\Controllers\BlogController;
 use Nwidart\Modules\Module;
-use Modules\Blog\Http\Requests\PostRequest;
+use Modules\Blog\Http\Requests\Admin\PostRequest;
 
 use Modules\Blog\Repositories\Admin\Interfaces\PageRepositoryInterface;
 
