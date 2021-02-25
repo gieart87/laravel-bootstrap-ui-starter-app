@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use Modules\Blog\Http\Controllers\BlogController;
 use Nwidart\Modules\Module;
-use Modules\Blog\Http\Requests\PostRequest;
+use Modules\Blog\Http\Requests\Admin\PostRequest;
 
 use Modules\Blog\Repositories\Admin\Interfaces\PostRepositoryInterface;
 use Modules\Blog\Repositories\Admin\Interfaces\CategoryRepositoryInterface;
@@ -34,6 +34,7 @@ class PostController extends BlogController
 
         $this->data['categories'] = $this->categoryRepository->findList();
         $this->data['statuses'] = $this->postRepository->getStatuses();
+        $this->data['metaFields'] = $this->postRepository->getMetaFields();
         $this->data['viewTrash'] = false;
     }
     /**

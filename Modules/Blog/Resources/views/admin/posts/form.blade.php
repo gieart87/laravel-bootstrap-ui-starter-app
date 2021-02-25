@@ -54,6 +54,7 @@
                             </div>
                         </div>
                     </div>
+                    @include('blog::admin.posts._meta_fields', ['metaFields' => $metaFields])
                 </div>
                 <div class="col-lg-4">
                     <div class="row">

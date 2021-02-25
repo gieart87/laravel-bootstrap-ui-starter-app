@@ -106,6 +106,37 @@ class PostTest extends BlogTestCase
     }
 
     /**
+     * Test admin can add a post
+     *
+     * @return void
+     */
+    public function testAdminCanAddAPostWithMetaKeywordAndDescription()
+    {
+        $params = [
+            'title' => $this->faker->name(),
+            'keywords' => ['keywords 1', 'keywords 2'],
+            'description' => 'meta desc',
+        ];
+
+        $response = $this
+            ->actingAs($this->admin)
+            ->post('/admin/blog/posts', $params);
+
+        $response->assertStatus(302);
+        $response->assertSessionHasNoErrors();
+
+        $post = Post::first();
+
+        $this->assertNotNull($post);
+        $this->assertEquals($params['title'], $post->title);
+        $this->assertEquals($params['description'], $post->metas['description']);
+        $this->assertEquals($params['keywords'], $post->metas['keywords']);
+
+        $response->assertRedirect('/admin/blog/posts/'. $post->id .'/edit');
+        $response->assertSessionHas('success', __('blog::posts.success_create_message'));
+    }
+
+    /**
      * Test admin can update a post
      *
      * @return void

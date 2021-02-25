@@ -26,6 +26,7 @@ class CreateBlogTables extends Migration
             $table->text('body')->nullable();
             $table->string('featured_image')->nullable();
             $table->string('featured_image_caption')->nullable();
+            $table->json('metas')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

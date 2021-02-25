@@ -1,8 +1,9 @@
 <?php
 
-namespace Modules\Blog\Http\Requests;
+namespace Modules\Blog\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\Blog\Entities\Post;
 
 class PostRequest extends FormRequest
 {
@@ -18,8 +19,15 @@ class PostRequest extends FormRequest
         } else {
             $title = 'required|unique:blog_posts,title';
         }
+       
+        $metaFieldsRules = [];
+        if (Post::META_FIELDS) {
+            foreach (Post::META_FIELDS as $metaField => $metaFieldAttr) {
+                $metaFieldsRules[$metaField] = $metaFieldAttr['validation_rules'];
+            }
+        }
 
-        return [
+        return array_merge($metaFieldsRules, [
             'title' => $title,
             'excerpt' => '',
             'body' => '',
@@ -28,7 +36,7 @@ class PostRequest extends FormRequest
             'tags' => '',
             'categories' => '',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:4096',
-        ];
+        ]);
     }
 
     /**

@@ -84,6 +84,7 @@ class PostRepository implements PostRepositoryInterface
         $params['post_type'] = Post::POST;
         $params['slug'] = Str::slug($params['title']);
         $params['code'] = $this->generateCode();
+        $params = array_merge($params, $this->buildMetaParams($params));
 
         return DB::transaction(function () use ($params) {
             if ($post = Post::create($params)) {
@@ -126,6 +127,8 @@ class PostRepository implements PostRepositoryInterface
 
     public function update(Post $post, $params = [])
     {
+        $params = array_merge($params, $this->buildMetaParams($params));
+
         return DB::transaction(function () use ($post, $params) {
             $this->setFeaturedImage($post, $params);
             $this->syncCategories($post, $params);
@@ -172,6 +175,20 @@ class PostRepository implements PostRepositoryInterface
         }
     }
 
+    private function buildMetaParams($params)
+    {
+        $metaParams = [];
+        foreach (Post::META_FIELDS as $metaField => $metaFieldAttr) {
+            if (!empty($params[$metaField])) {
+                $metaParams[$metaField] = $params[$metaField];
+            }
+        }
+
+        $params['metas'] = $metaParams;
+
+        return $params;
+    }
+
     public function delete($id, $permanentDelete = false)
     {
         $post  = Post::withTrashed()->findOrFail($id);
@@ -214,5 +231,10 @@ class PostRepository implements PostRepositoryInterface
     public function getStatuses()
     {
         return Post::STATUSES;
+    }
+
+    public function getMetaFields()
+    {
+        return Post::META_FIELDS;
     }
 }
