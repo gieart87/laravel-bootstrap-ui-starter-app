@@ -198,7 +198,7 @@ class RoleController extends Controller
             $permissionActions[] = $this->permissionRepository->create(['name' => $name]);
         }
 
-        $adminRole = $this->roleRepository->findByName('admin');
+        $adminRole = $this->roleRepository->findByName('Admin');
         $adminRole->givePermissionTo($permissionActions);
     }
 }
