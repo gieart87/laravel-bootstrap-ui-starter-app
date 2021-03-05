@@ -136,6 +136,22 @@ class PostTest extends BlogTestCase
         $response->assertSessionHas('success', __('blog::posts.success_create_message'));
     }
 
+    public function testAdminCanViewTheUpdatePostFormWithNoMetaDescription()
+    {
+        $existPost = Post::factory()->create([
+            'metas' => [
+                'keywords' => ['keywords 1', 'keywords 2'],
+            ]
+        ]);
+        
+        $response = $this
+            ->actingAs($this->admin)
+            ->get('/admin/blog/posts/'. $existPost->id . '/edit');
+        
+        $response->assertStatus(200);
+        $response->assertSessionHasNoErrors();
+    }
+
     /**
      * Test admin can update a post
      *

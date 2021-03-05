@@ -9,8 +9,8 @@
                     {!! Form::label($field, $fieldAttributes['label'], ['class' => 'col-sm-3 col-form-label ']) !!}
                     <div class="col-sm-9">
                         @php
-                            $metaFieldValue = (!empty($post->metas)) ? $post->metas[$field] : null;
-                            if ($fieldAttributes['type'] == 'select' and $metaFieldValue == null) {
+                            $metaFieldValue = (!empty($post->metas)) && !empty($post->metas[$field]) ? $post->metas[$field] : null;
+                            if ($fieldAttributes['type'] == 'select' && $metaFieldValue == null) {
                                 $metaFieldValue = [];
                             }
 
