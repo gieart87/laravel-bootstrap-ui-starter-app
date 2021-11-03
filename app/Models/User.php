@@ -63,4 +63,13 @@ class User extends Authenticatable
     {
         return Carbon::parse($this->attributes['email_verified_at'])->format('d, M Y H:i:s');
     }
+
+    public function getShowEditRemoveBtnAttribute()
+    {
+        if (($this->id == auth()->user()->id) or $this->hasRole(\App\Models\Role::ADMIN)) {
+            return false;
+        }
+
+        return true;
+    }
 }

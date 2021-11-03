@@ -41,23 +41,25 @@
                                                     <a class="btn btn-sm btn-info" href="{{ url('admin/users/'. $user->id)}}"><i class="far fa-eye"></i> @lang('general.btn_show_label') </a>
                                                 @endcan
 
-                                                @can('edit_users')
-                                                    <a class="btn btn-sm btn-warning" href="{{ url('admin/users/'. $user->id .'/edit')}}"><i class="far fa-edit"></i> @lang('general.btn_edit_label') </a>
-                                                @endcan
+                                                @if ($user->show_edit_remove_btn)
+                                                    @can('edit_users')
+                                                        <a class="btn btn-sm btn-warning" href="{{ url('admin/users/'. $user->id .'/edit')}}"><i class="far fa-edit"></i> @lang('general.btn_edit_label') </a>
+                                                    @endcan
 
-                                                @can('delete_users')
-                                                    <a href="{{ url('admin/users/'. $user->id) }}" class="btn btn-sm btn-danger" onclick="
-                                                        event.preventDefault();
-                                                        if (confirm('Do you want to remove this?')) {
-                                                            document.getElementById('delete-role-{{ $user->id }}').submit();
-                                                        }">
-                                                        <i class="far fa-trash-alt"></i> @lang('general.btn_delete_label')
-                                                    </a>
-                                                    <form id="delete-role-{{ $user->id }}" action="{{ url('admin/users/'. $user->id) }}" method="POST">
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        @csrf
-                                                    </form>
-                                                @endcan
+                                                    @can('delete_users')
+                                                        <a href="{{ url('admin/users/'. $user->id) }}" class="btn btn-sm btn-danger" onclick="
+                                                            event.preventDefault();
+                                                            if (confirm('Do you want to remove this?')) {
+                                                                document.getElementById('delete-role-{{ $user->id }}').submit();
+                                                            }">
+                                                            <i class="far fa-trash-alt"></i> @lang('general.btn_delete_label')
+                                                        </a>
+                                                        <form id="delete-role-{{ $user->id }}" action="{{ url('admin/users/'. $user->id) }}" method="POST">
+                                                            <input type="hidden" name="_method" value="DELETE">
+                                                            @csrf
+                                                        </form>
+                                                    @endcan
+                                                @endif
                                             </td>
                                         </tr>
                                     @empty

@@ -159,6 +159,16 @@ class UserController extends Controller
     {
         $user = $this->userRepository->findById($id);
 
+        if ($user->id == auth()->user()->id) {
+            return redirect('admin/users')
+                ->with('error', 'Could not delete yourself.');
+        }
+
+        if ($user->hasRole(\App\Models\Role::ADMIN)) {
+            return redirect('admin/users')
+                ->with('error', 'Could not delete the admin user.');
+        }
+
         if ($this->userRepository->delete($id)) {
             return redirect('admin/users')
                 ->with('success', __('users.success_deleted_message', ['name' => $user->name]));
