@@ -25,5 +25,8 @@
         @can('view_roles')
             <li class="{{ ($currentAdminMenu == 'roles') ? $activeClass : '' }}"><a class="nav-link" href="{{ url('admin/roles')}}"><i class="fas fa-lock"></i> <span>@lang('roles.menu_role_label')</span></a></li>
         @endcan
+        @if (auth()->user()->hasRole(\App\Models\Role::ADMIN))
+            <li class="{{ ($currentAdminMenu == 'settings') ? $activeClass : '' }}"><a class="nav-link" href="{{ url('admin/settings')}}"><i class="fas fa-cogs"></i> <span>@lang('settings.menu_settings_label')</span></a></li>
+        @endif
     </ul>
 </aside>

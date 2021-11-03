@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Setting;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,6 +25,13 @@ class DatabaseSeeder extends Seeder
             $this->command->call('migrate:refresh');
             $this->command->warn("Data cleared, starting from blank database.");
         }
+
+         // Seed the default settings
+         $settings = Setting::defaultSettings();
+         foreach ($settings as $setting) {
+             Setting::firstOrCreate($setting);
+         }
+         $this->command->info('Default Settings added.');
 
         // Seed the default permissions
         $permissions = Permission::defaultPermissions();
