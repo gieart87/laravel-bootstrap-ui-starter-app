@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admin\RoleController as AdminRole;
 use App\Http\Controllers\Admin\UserController as AdminUser;
+use App\Http\Controllers\Admin\SettingController as AdminSetting;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +33,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('roles/reload-permissions', [AdminRole::class, 'reloadPermissions'])->name('roles.update');
     Route::resource('roles', AdminRole::class);
     Route::resource('users', AdminUser::class);
+
+    Route::get('settings/remove/{id}', [AdminSetting::class, 'remove'])->name('settings.update');
+    Route::get('settings', [AdminSetting::class, 'index'])->name('settings.update');
+    Route::post('settings', [AdminSetting::class, 'update'])->name('settings.update');
 });

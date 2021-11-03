@@ -34,6 +34,11 @@ class Permission extends SpatiePermission
             'add_roles',
             'edit_roles',
             'delete_roles',
+
+            'view_settings',
+            'add_settings',
+            'edit_settings',
+            'delete_settings',
         ];
     }
 }
