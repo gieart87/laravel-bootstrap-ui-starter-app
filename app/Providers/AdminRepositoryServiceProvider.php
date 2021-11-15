@@ -60,10 +60,12 @@ class AdminRepositoryServiceProvider extends ServiceProvider
             foreach ($modules as $module) {
                 $moduleDetails = $this->getModuleDetails($module);
 
-                $moduleAdminMenus[] = [
-                    'module' => $module->getLowerName(),
-                    'admin_menus' => $moduleDetails['admin_menus'],
-                ];
+                if (!empty($moduleDetails['admin_menus'])) {
+                    $moduleAdminMenus[] = [
+                        'module' => $module->getLowerName(),
+                        'admin_menus' => $moduleDetails['admin_menus'],
+                    ];
+                }
             }
         }
 
