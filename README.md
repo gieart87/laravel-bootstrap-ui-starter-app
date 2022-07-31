@@ -3,7 +3,7 @@
 Laravel8-Starter-App is a boilerplate project based on Laravel 8 Framework that you can start your project with.
 
 ### Installation
-- Open terminal and clone the repo : `git clone git@github.com:gieart87/laravel8-bootstrap-ui-starter-app.git`
+- Open terminal and clone the repo : `git clone git@github.com:gieart87/laravel-bootstrap-ui-starter-app.git`
 - Go to the project directory and copy the `env.example` as `.env` file
 - Update the `.env` file as you need. Especially the database config
 - Run `composer install`
