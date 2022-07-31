@@ -1,6 +1,6 @@
-## About Laravel8-Starter-App
+## About Laravel-Starter-App
 
-Laravel8-Starter-App is a boilerplate project based on Laravel 8 Framework that you can start your project with.
+Laravel-Starter-App is a boilerplate project based on Laravel Framework that you can start your project with.
 
 ### Installation
 - Open terminal and clone the repo : `git clone git@github.com:gieart87/laravel-bootstrap-ui-starter-app.git`
